@@ -21,11 +21,10 @@ namespace _20241211
     {
         string aqiURL = "https://data.moenv.gov.tw/api/v2/aqx_p_432?api_key=e8dd42e6-9b8b-43f8-991e-b3dee723a52d&limit=1000&sort=ImportDate%20desc&format=JSON";
 
-        AQIdata aqiData = new AQIdata();
-        List<Field> fields = new List<Field>();
-        List<Record> records = new List<Record>();
-
-        List<Record> selectedRecords = new List<Record>();
+        AQIdata aqiData = new AQIdata();  // 用於儲存AQI數據。
+        List<Field> fields = new List<Field>();  // 儲存AQI數據的字段（可能是空氣質量的不同屬性）。
+        List<Record> records = new List<Record>();  // 儲存AQI的記錄數據。
+        List<Record> selectedRecords = new List<Record>();  // 儲存選中的記錄數據。
         public MainWindow()
         {
             InitializeComponent();
@@ -49,29 +48,29 @@ namespace _20241211
         }
         private void DisplayAQIData()
         {
-            RecordDataGrid.ItemsSource = records;
+            RecordDataGrid.ItemsSource = records;  // 將`records`數據綁定到DataGrid顯示。
 
-            Record record = records[0];
-            DataWrapPanel.Children.Clear();
+            Record record = records[0];  // 取出第一條記錄。
+            DataWrapPanel.Children.Clear();  // 清空DataWrapPanel中的內容。
 
             foreach (Field field in fields)
             {
-                var propertyInfo = record.GetType().GetProperty(field.id);
+                var propertyInfo = record.GetType().GetProperty(field.id);  // 通過反射獲取字段屬性。
                 if (propertyInfo != null)
                 {
-                    var value = propertyInfo.GetValue(record) as string;
-                    if (double.TryParse(value, out double v))
+                    var value = propertyInfo.GetValue(record) as string;  // 獲取該字段的值。
+                    if (double.TryParse(value, out double v))  // 嘗試將值轉為數字。
                     {
                         CheckBox cb = new CheckBox
                         {
-                            Content = field.info.label,
-                            Tag = field.id,
+                            Content = field.info.label,  // 設定CheckBox顯示的內容為字段的label。
+                            Tag = field.id,  // 設置CheckBox的Tag為字段的id。
                             Margin = new Thickness(3),
                             FontSize = 14,
                             FontWeight = FontWeights.Bold,
                             Width = 120
                         };
-                        DataWrapPanel.Children.Add(cb);
+                        DataWrapPanel.Children.Add(cb);  // 將CheckBox加入DataWrapPanel。
                     }
                 }
             }
