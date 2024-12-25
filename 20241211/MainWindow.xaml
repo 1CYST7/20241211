@@ -9,40 +9,25 @@
         Title="MainWindow" Height="700" Width="1200">
     <Grid>
         <Grid.RowDefinitions>
-            <!-- 第一行，設定高度為80 -->
             <RowDefinition Height="80" />
-            <!-- 第二行，設定高度為剩餘空間（500倍）-->
             <RowDefinition Height="500*" />
-            <!-- 第三行，設定高度為30 -->
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <!-- 第一列，設定寬度為250倍 -->
             <ColumnDefinition Width="250*" />
-            <!-- 第二列，設定寬度為5 -->
             <ColumnDefinition Width="5" />
-            <!-- 第三列，設定寬度為600倍 -->
             <ColumnDefinition Width="600*" />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Orientation="Vertical" Background="#FFF6EBEB"
-                    Height="80" VerticalAlignment="Center"  >
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Orientation="Vertical" VerticalAlignment="Center" Background="#FFF6EBEB" Height="80">
             <StackPanel Orientation="Horizontal">
-                <Label Content="AQI空氣品質監測" Height="40" Margin="20,0,0,0"
-                       VerticalAlignment="Center" 
-                       VerticalContentAlignment="Center" FontWeight="Bold" FontSize="14" />
-                <TextBox x:Name="urlTextBox"  Margin="20,0,0,0"
-                         Width="950" Height="30" VerticalAlignment="Center" 
-                         HorizontalContentAlignment="Left" VerticalContentAlignment="Center" />
+                <Label Content="AQI空氣品質監測" Height="40" VerticalAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold" FontSize="14" Margin="20,0,0,0"/>
+                <TextBox x:Name="urlTextBox" VerticalAlignment="Center" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Width="950" Height="30" Margin="20,0,0,0"/>
             </StackPanel>
 
-            <Button x:Name="btnGetAQI" Content="取得空氣品質" Margin="20,0,0,0"
-                    Height="30" Width="100"  HorizontalAlignment="Left"  
-                    Click="btnGetAQI_Click"/>
+            <Button x:Name="btnGetAQI" Content="取得空氣品質" HorizontalAlignment="Left"  Height="30" Width="100" Margin="20,0,0,0" Click="btnGetAQI_Click"/>
         </StackPanel>
         <TextBox x:Name="ContentTextBox" Grid.Row="1" Grid.Column="0" Background="#FFF9F8E9"/>
-        <GridSplitter Grid.Row="1" Grid.Column="1" Background="LightGray"
-                      Height="Auto" Width="5"  HorizontalAlignment="Center" 
-                      Cursor="SizeWE"/>
+        <GridSplitter Grid.Row="1" Grid.Column="1" Height="Auto" Width="5" Background="LightGray" HorizontalAlignment="Center" Cursor="SizeWE"/>
         <Grid Grid.Row="1" Grid.Column="2" Background="#FFF2FADD" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="300"/>
@@ -50,23 +35,16 @@
                 <RowDefinition Height="80"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" Margin="2,2,2,2" 
-                    BorderBrush="Red" BorderThickness="1">
-                <DataGrid x:Name="RecordDataGrid" AutoGenerateColumns="True"/>
+            <Border Grid.Row="0" Margin="2,2,2,2" BorderBrush="Red" BorderThickness="1">
+                <DataGrid x:Name="RecordDataGrid" AutoGenerateColumns="True" LoadingRow="RecordDataGrid_LoadingRow" SelectionChanged="RecordDataGrid_SelectionChanged"/>
             </Border>
-            <GridSplitter Grid.Row="1" Background="LightGray"
-                          Height="5"  VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
-            <Border Grid.Row="2" Margin="2,2,2,2" Background="#FFD8ECF2"
-                    BorderBrush="Blue"  BorderThickness="1">
+            <GridSplitter Grid.Row="1" Height="5" Background="LightGray" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+            <Border Grid.Row="2" Margin="2,2,2,2" BorderBrush="Blue" Background="#FFD8ECF2" BorderThickness="1">
                 <WrapPanel x:Name="DataWrapPanel" Orientation="Horizontal" Margin="5,5,5,5"/>
             </Border>
-            <!-- 顯示圖表的區域 -->
-            <Border Grid.Row="3" Margin="2,2,2,2" Background="#FFD8F2D8"
-                    BorderBrush="Green"  BorderThickness="1">
-                <!-- 使用LiveCharts顯示AQI圖表 -->
+            <Border Grid.Row="3" Margin="2,2,2,2" BorderBrush="Green" Background="#FFD8F2D8" BorderThickness="1">
                 <lvc:CartesianChart x:Name="AQIChart" MinWidth="500">
                     <lvc:CartesianChart.AxisX>
-                        <!-- X軸標題設置為數值 -->
                         <lvc:Axis Title="數值"/>
                     </lvc:CartesianChart.AxisX>
                 </lvc:CartesianChart>

@@ -1,4 +1,8 @@
-﻿using System.Net.Http;
+﻿using _2024_WpfApp7;
+using LiveCharts;
+using LiveCharts.Wpf;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
@@ -24,6 +28,7 @@ namespace _20241211
         AQIdata aqiData = new AQIdata();  // 用於儲存AQI數據。
         List<Field> fields = new List<Field>();  // 儲存AQI數據的字段（可能是空氣質量的不同屬性）。
         List<Record> records = new List<Record>();  // 儲存AQI的記錄數據。
+        SeriesCollection seriesCollection = new SeriesCollection();
         List<Record> selectedRecords = new List<Record>();  // 儲存選中的記錄數據。
         public MainWindow()
         {
@@ -70,10 +75,46 @@ namespace _20241211
                             FontWeight = FontWeights.Bold,
                             Width = 120
                         };
+                        cb.Checked += UpdateChart;
+                        cb.Unchecked += UpdateChart;
                         DataWrapPanel.Children.Add(cb);  // 將CheckBox加入DataWrapPanel。
                     }
                 }
             }
+        }
+        private void UpdateChart(object sender, RoutedEventArgs e)
+        {
+            seriesCollection.Clear();
+
+            foreach (CheckBox cb in DataWrapPanel.Children)
+            {
+                if (cb.IsChecked == true)
+                {
+                    List<string> labels = new List<string>();
+                    string tag = cb.Tag as string;
+                    ColumnSeries columnSeries = new ColumnSeries();
+                    ChartValues<double> values = new ChartValues<double>();
+
+                    foreach (Record r in selectedRecords)
+                    {
+                        var propertyInfo = r.GetType().GetProperty(tag);
+                        if (propertyInfo != null)
+                        {
+                            var value = propertyInfo.GetValue(r) as string;
+                            if (double.TryParse(value, out double v))
+                            {
+                                labels.Add(r.sitename);
+                                values.Add(v);
+                            }
+                        }
+                    }
+                    columnSeries.Values = values;
+                    columnSeries.Title = tag;
+                    columnSeries.LabelPoint = point => $"{labels[(int)point.X]}:{point.Y.ToString()}";
+                    seriesCollection.Add(columnSeries);
+                }
+            }
+            AQIChart.Series = seriesCollection;
         }
         // 定義一個異步方法來從指定的URL抓取AQI數據。
         private async Task<string> GetAQIAsync(string url)
@@ -82,9 +123,29 @@ namespace _20241211
             using (var client = new HttpClient())
             {
                 var response = await client.GetAsync(url);  // 發送GET請求，並等待響應。
-                var content = await response.Content.ReadAsStringAsync();  // 以字串格式讀取響應內容。
-                return content;  // 返回響應內容，即AQI數據。
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    statusBarText.Text = $"Error: {response.StatusCode}";
+                    return null;
+                }
+                else
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    return content;
+                }
             }
+        
+        }
+
+        private void RecordDataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+        }
+
+        private void RecordDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            selectedRecords = RecordDataGrid.SelectedItems.Cast<Record>().ToList();
+            statusBarText.Text = $"共有{selectedRecords.Count}筆資料";
         }
     }
 }

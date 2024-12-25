@@ -1,7 +1,4 @@
-﻿using System;
-using System.Web;
-
-namespace _20241211
+﻿namespace _2024_WpfApp7
 {
     public class Extras
     {
@@ -67,5 +64,4 @@ namespace _20241211
         public Links _links { get; set; }
         public List<Record> records { get; set; }
     }
-
 }
