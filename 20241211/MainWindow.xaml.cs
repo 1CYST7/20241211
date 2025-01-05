@@ -38,11 +38,11 @@ namespace _20241211
 
             string data = await GetAQIAsync(url);  // 異步呼叫GetAQIAsync方法來抓取AQI數據。
             ContentTextBox.Text = data;  // 將抓取到的AQI數據顯示在ContentTextBox中。
-            aqiData = JsonSerializer.Deserialize<AQIdata>(data);
-            fields = aqiData.fields.ToList();
-            records = aqiData.records.ToList();
-            selectedRecords = records;
-            statusBarText.Text = $"共有{records.Count}筆資料";
+            aqiData = JsonSerializer.Deserialize<AQIdata>(data);  // 將JSON字串`data`反序列化為`AQIdata`物件。
+            fields = aqiData.fields.ToList();  // 將`AQIdata`中的`fields`屬性轉換為列表。
+            records = aqiData.records.ToList();  // 將`AQIdata`中的`records`屬性轉換為列表。
+            selectedRecords = records;  
+            statusBarText.Text = $"共有{records.Count}筆資料";  // 更新狀態欄文字，顯示記錄的總數。
 
             DisplayAQIData();
         }

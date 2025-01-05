@@ -40,6 +40,7 @@
                     Click="btnGetAQI_Click"/>
         </StackPanel>
         <TextBox x:Name="ContentTextBox" Grid.Row="1" Grid.Column="0" Background="#FFF9F8E9"/>
+        <!--SizeWE：水平調整大小的游標，通常顯示為左右箭頭-->
         <GridSplitter Grid.Row="1" Grid.Column="1" Background="LightGray"
                       Height="Auto" Width="5"  HorizontalAlignment="Center" 
                       Cursor="SizeWE"/>
@@ -72,6 +73,7 @@
                 </lvc:CartesianChart>
             </Border>
         </Grid>
+        <!--底部區域-->
         <StatusBar Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Background="#FFD9D9D9">
             <StatusBarItem>
                 <TextBlock x:Name="statusBarText" Text="Ready" Margin="50,0,0,0"/>
