@@ -22,7 +22,7 @@ namespace _20241211
         public MainWindow()
         {
             InitializeComponent();
-            urlTextBox.Text = aqiURL;  // 設定TextBox中的預設URL為`aqiURL`。
+            urlTextBox.Text = aqiURL;  // 設定TextBox中的預設URL為aqiURL。
         }
 
         private async void btnGetAQI_Click(object sender, RoutedEventArgs e)
@@ -30,6 +30,7 @@ namespace _20241211
             string url = urlTextBox.Text;  // 取得TextBox中的URL。
             ContentTextBox.Text = "抓取資料中...";  // 在ContentTextBox顯示"抓取資料中..."提示文字。
 
+            //使用 await 關鍵字時，方法會暫停執行，直到被等待的任務完成
             string data = await GetAQIAsync(url);  // 異步呼叫GetAQIAsync方法來抓取AQI數據。
             ContentTextBox.Text = data;  // 將抓取到的AQI數據顯示在ContentTextBox中。
         }
